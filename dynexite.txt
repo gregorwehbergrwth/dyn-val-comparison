@@ -1,0 +1,503 @@
+
+in einem Tag
+Aufgabe 1
+59 Punkte
+Gegeben:
+
+Stahlbetonträger eines Außenbauteils gemäß Abbildung.
+
+Statisches System und Belastung:
+
+
+
+Baustoffe:
+
+Betonstahl:
+
+B500
+
+Betonklasse:
+
+C35/45
+
+Abmessungen:
+
+
+
+
+
+
+
+
+
+
+
+
+
+Einwirkungen:
+
+
+Eigengewicht
+
+
+
+
+
+Kombinationsbeiwerte:
+
+
+
+
+
+Bewehrung:
+
+ü
+
+
+ä
+
+
+statische Nutzhöhe
+
+Feldbereich:
+
+ (2-lagig)
+
+Stützbereich:
+
+ (1-lagig)
+
+Querkraft am Auflager
+:
+
+
+
+Biegebewehrung:
+
+Feld:
+
+Stütze:
+
+
+
+
+
+
+
+
+
+Druckstrebenneigung:
+
+Auflager
+
+Auflager
+
+Auflager
+
+Feldbereich
+
+Abstand links vom Auflager
+
+
+
+
+
+Druckstrebenneigung
+
+
+
+
+
+Momentenverlauf der einzelnen Lastfälle:
+
+
+
+
+ü
+
+
+
+1.5
+
+15.75
+
+101.25
+
+67.5
+
+393.75
+
+
+3.0
+
+15.75
+
+135.0
+
+67.5
+
+262.5
+
+
+6
+
+-31.5
+
+0.0
+
+-135.0
+
+0.0
+
+Hinweise:
+
+1.) Zur Überprüfung ist eine handschriftliche Lösung der Online Hausübung anzufertigen.
+2.) Die geforderten Werte sind auf die angegeben Nachkommastellen zu runden.
+3.) Bei abweichenden Ergebnissen innerhalb der Toleranz (blau) ist bei den Folgewerten mit den angegebenen exakten Werten weiter zu rechnen.
+4.) Der innere Hebelarm
+ kann mit
+ abgeschätzt werden.
+5.) Die gewählte Bewehrung besitzt ein gerades Stabende ohne angeschweißte Querstäbe.
+6.) Es gibt keine Querbewehrung.
+7.) Der Stahlbetonträger ist direkt gelagert.
+8.) Über die gesamte Trägerlänge sind jeweils oben und unten mindestens 2 Stäbe einzulegen.
+
+a) Berechnung des Versatzmaßes. (Immer 2 NKS)
+4 Punkte
+1 Punkt
+Auflager
+
+0,58
+1 Punkt
+Auflager
+
+0,75
+1 Punkt
+Auflager
+
+1
+1 Punkt
+Feldbereich
+
+0,97
+b) Wahl der Skizze des Versatzmaßes.
+1 Punkt
+
+
+
+
+c) Berechnung der Stahlzugkräfte. (Immer 0 NKS)
+7 Punkte
+1 Punkt
+Stahlzugkräfte im Feld:
+Oberseite
+
+273
+1 Punkt
+Unterseite
+
+1367
+1 Punkt
+Einzellast
+
+1179
+1 Punkt
+Feldmitte
+
+953
+1 Punkt
+Stahlzugkräfte am Auflager
+:
+Oberseite
+
+547
+1 Punkt
+Unterseite
+
+273
+1 Punkt
+
+371
+d) Wahl der Skizze der Zugkraftdeckungslinie.
+1 Punkt
+
+
+
+
+e) Nachweis der Verankerungslänge.
+30 Punkte
+1 Punkt
+Verankerung der Biegezugbewehrung über der Stütze:
+Mindestbewehrung:
+
+
+1 NKS
+
+4,1
+1 Punkt
+
+1 NKS
+
+12,6
+1 Punkt
+Querschnittsfläche ausreichend?
+
+
+1 Punkt
+Stahlmenge direkt über der Stütze:
+
+
+0 NKS
+
+4
+1 Punkt
+
+1 NKS
+
+12,6
+1 Punkt
+Stahlmenge im restlichen Bereich:
+
+
+0 NKS
+
+2
+1 Punkt
+
+1 NKS
+
+6,3
+1 Punkt
+Stahlspannung im Grenzzustand der Tragfähigkeit:
+
+
+0 NKS
+
+218
+1 Punkt
+Grundwert der Verankerungslänge:
+
+
+2 NKS
+
+32,06
+1 Punkt
+Bemessungswert der Verankerungslänge:
+
+
+0 NKS
+
+1
+1 Punkt
+
+0 NKS
+
+1
+1 Punkt
+
+0 NKS
+
+1
+1 Punkt
+
+2 NKS
+
+1
+1 Punkt
+
+2 NKS
+
+32,06
+1 Punkt
+
+2 NKS
+
+20
+1 Punkt
+Verankerung der Biegezugbewehrung über dem Feld:
+Mindestbewehrung:
+
+
+1 NKS
+
+3,5
+1 Punkt
+
+1 NKS
+
+31,4
+1 Punkt
+Querschnittsfläche ausreichend?
+
+
+1 Punkt
+Stahlmenge direkt über der Stütze:
+
+
+0 NKS
+
+10
+1 Punkt
+
+1 NKS
+
+31,4
+1 Punkt
+Stahlmenge im restlichen Bereich:
+
+
+0 NKS
+
+2
+1 Punkt
+
+1 NKS
+
+6,3
+1 Punkt
+Stahlspannung im Grenzzustand der Tragfähigkeit:
+
+
+0 NKS
+
+87
+1 Punkt
+Grundwert der Verankerungslänge:
+
+
+2 NKS
+
+12,79
+1 Punkt
+Bemessungswert der Verankerungslänge:
+
+
+0 NKS
+
+1
+1 Punkt
+
+0 NKS
+
+1
+1 Punkt
+
+0 NKS
+
+1
+1 Punkt
+
+2 NKS
+
+1
+1 Punkt
+
+2 NKS
+
+12,79
+1 Punkt
+
+2 NKS
+
+20
+f) Wahl der wirtschaftlichsten Bewehrungsskizze.
+1 Punkt
+
+
+
+
+g) Nachweis der Endverankerung über Auflager A.
+15 Punkte
+1 Punkt
+Verankerung der Biegezugbewehrung am Endauflager A:
+Mindestbewehrung:
+
+
+1 NKS
+
+6,7
+1 Punkt
+
+1 NKS
+
+31,4
+1 Punkt
+Querschnittsfläche ausreichend?
+
+
+1 Punkt
+erforderliche Bewehrung:
+
+
+0 NKS
+
+492
+1 Punkt
+
+1 NKS
+
+11,3
+1 Punkt
+Stahlspannung im Grenzzustand der Tragfähigkeit:
+
+
+0 NKS
+
+157
+1 Punkt
+Grundwert der Verankerungslänge:
+
+
+2 NKS
+
+23,09
+1 Punkt
+Bemessungswert der Verankerungslänge:
+
+
+0 NKS
+
+1
+1 Punkt
+
+0 NKS
+
+1
+1 Punkt
+
+0 NKS
+
+1
+1 Punkt
+
+2 NKS
+
+0,67
+1 Punkt
+
+2 NKS
+
+15,47
+1 Punkt
+
+2 NKS
+
+13,4
+1 Punkt
+
+2 NKS
+
+23
+1 Punkt
+Verankerungslänge ausreichend?
+
+
+Alle Antworten und hochgeladenen Dateien wurden gespeichert.
+ Übersicht
+ Abgabe
+100 %
+1
+Ja
+Ja
+Ja
+Nein

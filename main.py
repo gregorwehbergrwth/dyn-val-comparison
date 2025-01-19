@@ -2,70 +2,67 @@ import re
 from collections import Counter
 
 
-def get_text(name):
+def read_file(name):
     with open(name, 'r', encoding='utf-8') as file:
         return file.read()
 
 
-def filter_numbers(text):
-    numbers = re.findall(r'\d+,\d+\n|\d+\n|-\d+,\d+\n|-\d+\n', text)
-    return [float(number.replace(',', '.')) for number in numbers]
+def extract_numbers(text):
+    patterns = re.findall(r'\d+,\d+\n|\d+\n|-\d+,\d+\n|-\d+\n', text)
+    return [float(num.replace(',', '.')) for num in patterns]
 
 
-def clear_dynexite_text(text):
+def clean_dynexite_text(text):
     lines = text.split('\n')
-    start_index = [i for i, line in enumerate(lines) if "Punkte" in line and i > 10][0]
-    end_index = [i for i, line in enumerate(lines) if "wurden gespeichert." in line][0]
-    lines = lines[start_index:end_index+1]
-    text = '\n'.join(lines)
-    patterns = [r'\d+ Punkte', r'\d+ Punkt', r'\d+ NKS', r'HEB \d+', r'HEA \d+']  # Subject-specific sequences need to be added manually
-    return re.sub('|'.join(patterns), '', text)
+    start_index = next(i for i, line in enumerate(lines) if "Punkte" in line and i > 10)
+    end_index = next(i for i, line in enumerate(lines) if "wurden gespeichert." in line)
+    text_section = '\n'.join(lines[start_index:end_index + 1])
+    patterns = [r'\d+ Punkte', r'\d+ Punkt', r'\d+ NKS', r'HEB \d+', r'HEA \d+'] # Subject-specific sequences need to be added manually
+    return re.sub('|'.join(patterns), '', text_section)
 
-def get_leftovers(dynexite_numbers, excel_numbers):
+def leftovers(dynexite_numbers, excel_numbers):
     return list((Counter(excel_numbers) - Counter(dynexite_numbers)).elements())
 
 
-def get_wrong_numbers(dynexite_numbers, excel_numbers):
-    dynexite_counter = Counter(dynexite_numbers)
-    excel_counter = Counter(excel_numbers)
-    wrong_numbers_counter = dynexite_counter - excel_counter
-    return list(wrong_numbers_counter.elements())
+def wrong(dynexite_list, excel_list):
+    return list((Counter(dynexite_list) - Counter(excel_list)).elements())
 
-def get_very_close_numbers(wrong_numbers, leftovers, tolerance=0.2):
-    very_close_numbers = []
+
+def near_matches(wrong, leftovers, tolerance=0.2):
+    close_matches = []
     if leftovers:
-        for number in wrong_numbers:
-            closest = min(leftovers, key=lambda x: abs(x-number))
-            if abs(closest - number) <= tolerance:
-                very_close_numbers.append(number)
-    return very_close_numbers
+        for num in wrong:
+            closest_match = min(leftovers, key=lambda x: abs(x - num), default=None)
+            if closest_match and abs(closest_match - num) <= tolerance:
+                close_matches.append(num)
+        return close_matches
 
 def filter_yes_no(text):
     yes = list(map(lambda x: x.replace("\n", ""), re.findall(r'Ja\n', text)))
     no = list(map(lambda x: x.replace("\n", ""), re.findall(r'Nein\n', text)))
     return yes, no
 
-def yes_no_check(dynexite, excel):
-    if len(dynexite[0]) > 0 or len(excel[0]) > 0 or len(dynexite[1]) > 0 or len(excel[1]) > 0:
-        if dynexite == excel:
-            print(f"Ja/Nein stimmen genau überein")
-        else:
-            print(f"Ja/Nein stimmen nicht überein. Dynexite: {len(dynexite[0])} Ja, {len(dynexite[1])} Nein. Excel: {len(excel[0])} Ja, {len(excel[1])} Nein")
-            print(dynexite, "\t"*5, excel)
+def compare_yes_no(dynexite, excel):
+    if dynexite == excel:
+        print(f"Ja/Nein stimmen genau überein")
+    else:
+        print(f"Ja/Nein stimmen nicht überein. Dynexite: {len(dynexite[0])} Ja, {len(dynexite[1])} Nein. Excel: {len(excel[0])} Ja, {len(excel[1])} Nein")
+        print(dynexite, "\t"*5, excel)
 
 if __name__ == '__main__':
     tolerance = 0.2
 
-    dynexite_text = get_text("Dynexite_Text.txt")
-    excel_text = get_text("Excel_Text.txt")
+    dynexite_text = read_file("Dynexite.txt")
+    excel_text = read_file("Excel.txt")
 
-    dynexite_numbers = filter_numbers(clear_dynexite_text(dynexite_text))
-    excel_numbers = filter_numbers(excel_text)
+    dynexite_numbers = extract_numbers(clean_dynexite_text(dynexite_text))
+    excel_numbers = extract_numbers(excel_text)
 
-    leftovers = get_leftovers(dynexite_numbers, excel_numbers)
-    wrong_numbers = get_wrong_numbers(dynexite_numbers, excel_numbers)
-    very_close_numbers = get_very_close_numbers(wrong_numbers, leftovers, tolerance)
-    yes_no_check(filter_yes_no(dynexite_text), filter_yes_no(excel_text))
+    leftovers = leftovers(dynexite_numbers, excel_numbers)
+    wrong_numbers = wrong(dynexite_numbers, excel_numbers)
+    very_close_numbers = near_matches(wrong_numbers, leftovers, tolerance)
+
+    compare_yes_no(filter_yes_no(dynexite_text), filter_yes_no(excel_text))
 
     if dynexite_numbers == excel_numbers:
         print("All numbers are correct and in the same order.")

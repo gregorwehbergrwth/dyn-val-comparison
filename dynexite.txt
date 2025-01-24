@@ -482,7 +482,7 @@ Bemessungswert der Verankerungslänge:
 
 2 NKS
 
-13,4
+4
 1 Punkt
 
 2 NKS

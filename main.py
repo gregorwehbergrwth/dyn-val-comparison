@@ -1,5 +1,7 @@
 import re
 from collections import Counter
+from excel_integration import save_numbers_to_file, numbers_from_excel
+from clipboard import clipboard_loop
 
 
 def read_file(name):
@@ -17,7 +19,9 @@ def clean_dynexite_text(text):
     start_index = next(i for i, line in enumerate(lines) if "Punkte" in line and i > 10)
     end_index = next(i for i, line in enumerate(lines) if "wurden gespeichert." in line)
     text_section = '\n'.join(lines[start_index:end_index])
-    patterns = [r'\d+ Punkte', r'\d+ Punkt', r'\d+ NKS', r'HEB \d+', r'HEA \d+']  # Subject-specific sequences need to be added manually
+    text_section +="\n"
+    patterns = [r'\d+ Punkte', r'\d+ Punkt', r'\d+ NKS', r'HEB \d+', r'HEA \d+', r'D\d+-D\d+', r'Platte D\d+', r'XC\d+']  # Subject-specific sequences need to be added manually
+    # print(text_section)
     return re.sub('|'.join(patterns), '', text_section)
 
 
@@ -29,7 +33,7 @@ def get_wrong(dyn, xl):
     return list((Counter(dyn) - Counter(xl)).elements())
 
 
-def near_matches(wrong, leftovers, tolerance=0.2):
+def near_matches(wrong, leftovers, tolerance=0.4):
     close_matches = []
     if leftovers:
         for num in wrong:
@@ -54,6 +58,12 @@ def compare_yes_no(dyn, xl):
 
 
 if __name__ == '__main__':
+    excel_filepath = r"C:\Users\grego\Downloads\HÜ_01_Excel.xlsx"  # Todo
+    position = 'B13:B36'  # Todo
+
+    numbers = numbers_from_excel(excel_filepath, position)
+    save_numbers_to_file('excel.txt', numbers)
+    tolerance = 0.2
 
     dynexite_text = read_file("Dynexite.txt")
     excel_text = read_file("Excel.txt")
@@ -63,21 +73,37 @@ if __name__ == '__main__':
 
     leftover_numbers = get_leftovers(dynexite_numbers, excel_numbers)
     wrong_numbers = get_wrong(dynexite_numbers, excel_numbers)
-    near_matches = near_matches(wrong_numbers, leftover_numbers, tolerance=0.2)
+    near_matches = near_matches(wrong_numbers, leftover_numbers, tolerance=tolerance)
 
     compare_yes_no(filter_yes_no(dynexite_text), filter_yes_no(excel_text))
+
+    close_matches = []
 
     if dynexite_numbers == excel_numbers:
         print("All numbers match exactly and are in order.")
     elif len(dynexite_numbers) != len(excel_numbers):
         print(f"Mismatch in count: Dynexite ({len(dynexite_numbers)}) vs Excel ({len(excel_numbers)})")
+        print(f"Dynexite: {dynexite_numbers}")
+        print(f"Excel:    {excel_numbers}")
+
     elif wrong_numbers:
         for num in wrong_numbers:
             closest_match = min(leftover_numbers, key=lambda x: abs(x - num), default=None)
-            print(f"Extra number {num} found. Closest match in Excel: {closest_match}.")
-        if len(near_matches) == len(wrong_numbers):
-            print("All extra numbers are very close to missing ones.")
+            print(f"Wrong number {num} found. Closest match in Excel: {closest_match}.")
+            close_matches.append([num, closest_match, round(abs(closest_match - num), 2)])
+        print("Number, Closest match, Difference")
+        print(*close_matches, sep="\n")
+        if all(abs(closest_match - num) <= tolerance for num, closest_match, _ in close_matches):
+            print(f"All extra numbers are very close to missing ones with a tolerance of {tolerance}.")
+        else:
+            print("Not all extra numbers are close to missing ones.")
     else:
         print("Numbers match but are out of order:")
         print(f"Dynexite: {dynexite_numbers}")
         print(f"Excel:    {excel_numbers}")
+
+    print(f"Dynexite: {dynexite_numbers}")
+    print(f"Excel:    {excel_numbers}")
+
+if input("Do you want to start the clipboard loop? (y/n)") == "y":
+    clipboard_loop("excel.txt")

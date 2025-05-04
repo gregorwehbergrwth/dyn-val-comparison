@@ -20,8 +20,7 @@ def clean_dynexite_text(text):
     end_index = next(i for i, line in enumerate(lines) if "wurden gespeichert." in line)
     text_section = '\n'.join(lines[start_index:end_index])
     text_section +="\n"
-    patterns = [r'\d+ Punkte', r'\d+ Punkt', r'\d+ NKS', r'HEB \d+', r'HEA \d+', r'D\d+-D\d+', r'Platte D\d+', r'XC\d+']  # Subject-specific sequences need to be added manually
-    # print(text_section)
+    patterns = [r'\d+ Punkte', r'\d+ Punkt', r'\d+ NKS', r'HEB \d+', r'HEA \d+', r'D\d+-D\d+', r'Platte D\d+', r'XC\d+', r'D\d+']  # Subject-specific sequences need to be added manually
     return re.sub('|'.join(patterns), '', text_section)
 
 
@@ -50,16 +49,22 @@ def filter_yes_no(text):
 
 
 def compare_yes_no(dyn, xl):
-    if dyn == xl:
+    if dyn == xl and dyn != 0:
         print(f"Ja/Nein stimmen genau überein")
+    elif dyn == xl and dyn == 0:
+        print("Keine Ja/Nein")
     else:
         print(f"Ja/Nein stimmen nicht überein. Dynexite: {len(dyn[0])} Ja, {len(dyn[1])} Nein. Excel: {len(xl[0])} Ja, {len(xl[1])} Nein")
         print(dyn, "\t" * 5, xl)
 
 
 if __name__ == '__main__':
-    excel_filepath = r"C:\Users\grego\Downloads\HÜ_01_Excel.xlsx"  # Todo
-    position = 'B13:B36'  # Todo
+    # excel_filepath = r"C:\Users\grego\Downloads\Massivbau 2 HÜ 2, aktualisiertSS21.xlsx"  # Todo
+    # position = 'D18:D129'  # Todo
+    # excel_filepath = r"C:\Users\grego\Downloads\MB_II_Hausübung_2.xlsx"
+    # position = 'D8:D117'
+    excel_filepath = r"C:\Users\grego\Downloads\HÜ_01_Excel.xlsx"
+    position = 'B13:B40'
 
     numbers = numbers_from_excel(excel_filepath, position)
     save_numbers_to_file('excel.txt', numbers)
@@ -86,17 +91,18 @@ if __name__ == '__main__':
         print(f"Dynexite: {dynexite_numbers}")
         print(f"Excel:    {excel_numbers}")
 
+
     elif wrong_numbers:
         for num in wrong_numbers:
             closest_match = min(leftover_numbers, key=lambda x: abs(x - num), default=None)
-            print(f"Wrong number {num} found. Closest match in Excel: {closest_match}.")
-            close_matches.append([num, closest_match, round(abs(closest_match - num), 2)])
-        print("Number, Closest match, Difference")
-        print(*close_matches, sep="\n")
-        if all(abs(closest_match - num) <= tolerance for num, closest_match, _ in close_matches):
-            print(f"All extra numbers are very close to missing ones with a tolerance of {tolerance}.")
+            close_matches.append([num, closest_match, abs(closest_match - num)])
+        for num in close_matches:
+            print(f'Number: {num[0]}, Closest Match: {num[1]}, Difference: {round(num[2], 2)}')
+        if all(diff <= tolerance for _, _, diff in close_matches):
+            print(f"All extra numbers are very close to missing ones within the tolerance of {tolerance}.")
         else:
-            print("Not all extra numbers are close to missing ones.")
+            med_diff = sum([diff for _, _, diff in close_matches])/len(close_matches)
+            print(f"Not all extra numbers are close to missing ones (Medium difference: {med_diff}.")  # todo hier weitermachen
     else:
         print("Numbers match but are out of order:")
         print(f"Dynexite: {dynexite_numbers}")
@@ -105,5 +111,5 @@ if __name__ == '__main__':
     print(f"Dynexite: {dynexite_numbers}")
     print(f"Excel:    {excel_numbers}")
 
-if input("Do you want to start the clipboard loop? (y/n)") == "y":
-    clipboard_loop("excel.txt")
+# if input("Do you want to start the clipboard loop? (y/n)") == "y":
+#     clipboard_loop("excel.txt")
